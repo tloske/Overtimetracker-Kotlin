@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OvertimeTracker</string>
+    <string name="overtime">Überstunden</string>
+    <string name="holiday">Urlaub</string>
+    <string name="hoursShort">Std</string>
+    <string name="hours">Stunden</string>
+    <string name="hoursSingular">Stunde</string>
+</resources>

@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">OvertimeTracker</string>
+    <string name="overtime">Overtime</string>
+    <string name="holiday">Holiday</string>
+    <string name="hoursShort">Hr</string>
+    <string name="hours">Hours</string>
+    <string name="hoursSingular">Hour</string>
+</resources>
