@@ -9,8 +9,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -18,6 +16,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -27,6 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.tloske.overtimetracker.screens.OvertimeTracker
+import com.tloske.overtimetracker.screens.Screen
 import com.tloske.overtimetracker.ui.theme.OvertimeTrackerTheme
 
 class MainActivity : ComponentActivity() {
@@ -77,7 +77,7 @@ fun BottomNavBar(navController: NavController) {
                 },
                 icon = {
                     Icon(
-                        imageVector = Icons.Filled.Favorite,
+                        painter = painterResource(id = screen.icon),
                         contentDescription = null,
                     )
                 },
