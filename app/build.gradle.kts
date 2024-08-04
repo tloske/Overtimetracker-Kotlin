@@ -56,6 +56,10 @@ dependencies {
     annotationProcessor(libs.room.compiler)
     ksp(libs.room.compiler)
 
+    implementation(libs.gms.play.services.ads)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore)
+
     implementation(libs.androidx.material)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)

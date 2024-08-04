@@ -5,4 +5,13 @@
     <string name="hoursShort">Hr</string>
     <string name="hours">Hours</string>
     <string name="hoursSingular">Hour</string>
+    <string name="days">Days</string>
+    <string name="daysSingular">Day</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="add">Add</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="date">Date</string>
+    <string name="multiplier">Multiplier</string>
 </resources>

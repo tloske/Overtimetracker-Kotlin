@@ -2,11 +2,11 @@ package com.tloske.overtimetracker
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.material3.Icon
@@ -25,6 +25,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import com.tloske.overtimetracker.composables.AdBanner
+import com.tloske.overtimetracker.screens.HolidayTracker
 import com.tloske.overtimetracker.screens.OvertimeTracker
 import com.tloske.overtimetracker.screens.Screen
 import com.tloske.overtimetracker.ui.theme.OvertimeTrackerTheme
@@ -33,6 +37,10 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MobileAds.initialize(this)
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder().setTestDeviceIds(listOf("ABCDEF012345")).build()
+        )
         enableEdgeToEdge()
         setContent {
             OvertimeTrackerTheme {
@@ -45,7 +53,9 @@ class MainActivity : ComponentActivity() {
                     composable(Screen.Overtime.route) {
                         OvertimeTracker { BottomNavBar(navController = navController) }
                     }
-                    composable(Screen.Holiday.route) {}
+                    composable(Screen.Holiday.route) {
+                        HolidayTracker { BottomNavBar(navController = navController) }
+                    }
                 }
             }
         }
@@ -55,35 +65,37 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BottomNavBar(navController: NavController) {
     val navItems = listOf(Screen.Overtime, Screen.Holiday)
-    Log.d("NavBar", "NavBar")
-    NavigationBar(
-        windowInsets = WindowInsets.navigationBars,
-        containerColor = MaterialTheme.colorScheme.primary
-    ) {
-        val navBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
-        navItems.forEach { screen ->
-            NavigationBarItem(
-                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                onClick = {
-                    navController.navigate(screen.route) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            saveState = true
-                        }
-                        launchSingleTop = true
+    Column {
+        AdBanner()
+        NavigationBar(
+            windowInsets = WindowInsets.navigationBars,
+            containerColor = MaterialTheme.colorScheme.primary
+        ) {
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
+            navItems.forEach { screen ->
+                NavigationBarItem(
+                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                    onClick = {
+                        navController.navigate(screen.route) {
+                            popUpTo(navController.graph.findStartDestination().id) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
 
-                        restoreState = true
-                    }
-                },
-                icon = {
-                    Icon(
-                        painter = painterResource(id = screen.icon),
-                        contentDescription = null,
-                    )
-                },
-                label = { Text(stringResource(id = screen.resourceId)) },
-                alwaysShowLabel = true,
-            )
+                            restoreState = true
+                        }
+                    },
+                    icon = {
+                        Icon(
+                            painter = painterResource(id = screen.icon),
+                            contentDescription = null,
+                        )
+                    },
+                    label = { Text(stringResource(id = screen.resourceId)) },
+                    alwaysShowLabel = true,
+                )
+            }
         }
     }
 }

@@ -6,4 +6,13 @@
     <string name="hoursShort">Std</string>
     <string name="hours">Stunden</string>
     <string name="hoursSingular">Stunde</string>
+    <string name="days">Tage</string>
+    <string name="daysSingular">Tag</string>
+    <string name="start">Start</string>
+    <string name="end">Ende</string>
+    <string name="add">Hinzufügen</string>
+    <string name="confirm">Bestätigen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="date">Datum</string>
+    <string name="multiplier">Multiplikator</string>
 </resources>

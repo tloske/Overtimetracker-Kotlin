@@ -6,7 +6,7 @@ import com.tloske.overtimetracker.data.HolidayRepository
 import com.tloske.overtimetracker.data.OvertimeRepository
 
 object Graph {
-    lateinit var database: AppDatabase
+    private lateinit var database: AppDatabase
 
     val overtimeRepository by lazy {
         OvertimeRepository(overtimeDao = database.overtimeDao())
@@ -17,6 +17,7 @@ object Graph {
     }
 
     fun provide(context: Context) {
-        database = Room.databaseBuilder(context, AppDatabase::class.java, "database.db").build()
+        database = Room.databaseBuilder(context, AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration().build()
     }
 }

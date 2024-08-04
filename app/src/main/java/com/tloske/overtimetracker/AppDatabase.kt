@@ -7,7 +7,7 @@ import com.tloske.overtimetracker.data.HolidayData
 import com.tloske.overtimetracker.data.OvertimeDao
 import com.tloske.overtimetracker.data.OvertimeData
 
-@Database(entities = [OvertimeData::class, HolidayData::class], version = 1)
+@Database(entities = [OvertimeData::class, HolidayData::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun holidayDao(): HolidayDao
     abstract fun overtimeDao(): OvertimeDao

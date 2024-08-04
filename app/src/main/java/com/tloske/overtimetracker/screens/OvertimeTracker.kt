@@ -51,9 +51,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.tloske.overtimetracker.AddOvertimeSheetContent
 import com.tloske.overtimetracker.R
-import com.tloske.overtimetracker.RemoveOvertimeSheetContent
+import com.tloske.overtimetracker.composables.AddOvertimeSheetContent
+import com.tloske.overtimetracker.composables.RemoveOvertimeSheetContent
 import com.tloske.overtimetracker.data.OvertimeData
 import com.tloske.overtimetracker.viewmodels.OvertimeViewModel
 
@@ -125,7 +125,6 @@ fun OvertimeTracker(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-
             items(overtimeList.value) { item ->
                 val dismissState = rememberSwipeToDismissBoxState(
                     positionalThreshold = { 500f },
@@ -172,7 +171,6 @@ fun OvertimeTracker(
                     enableDismissFromEndToStart = true,
                 ) {
                     OvertimeListItem(overtimeData = item)
-
                 }
             }
         }
