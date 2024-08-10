@@ -38,8 +38,6 @@ import java.time.Clock
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddOvertimeSheetContent(viewModel: OvertimeViewModel) {
-
-
     var showStartTimePicker by remember { mutableStateOf(false) }
     var showEndTimePicker by remember { mutableStateOf(false) }
     var showDatePicker by remember { mutableStateOf(false) }

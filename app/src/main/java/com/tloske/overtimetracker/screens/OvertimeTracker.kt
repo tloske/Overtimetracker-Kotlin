@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,9 +14,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -58,19 +59,20 @@ import com.tloske.overtimetracker.data.OvertimeData
 import com.tloske.overtimetracker.viewmodels.OvertimeViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun OvertimeTracker(
     viewModel: OvertimeViewModel = viewModel(),
     bottomBar: @Composable () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val overtimeList = viewModel.getOvertimeList.collectAsState(initial = listOf())
     var hours: Float
     var showFabs by remember { mutableStateOf(false) }
     var addRemoveToggle = false
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -93,27 +95,42 @@ fun OvertimeTracker(
             )
         },
         floatingActionButton = {
-
             if (showFabs) {
                 Column {
-                    FloatingActionButton(onClick = {
-                        viewModel.showBottomSheet = true
-                        addRemoveToggle = true
-                        showFabs = !showFabs
-                    }) {
+                    FloatingActionButton(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        onClick = {
+                            viewModel.showBottomSheet = true
+                            addRemoveToggle = true
+                            showFabs = !showFabs
+                        }) {
                         Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    FloatingActionButton(onClick = {
-                        viewModel.showBottomSheet = true
-                        addRemoveToggle = false
-                        showFabs = !showFabs
-                    }) {
+                    FloatingActionButton(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        onClick = {
+                            viewModel.showBottomSheet = true
+                            addRemoveToggle = false
+                            showFabs = !showFabs
+                        }) {
                         Text(text = "-", fontSize = 32.sp)
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    FloatingActionButton(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        onClick = { showFabs = !showFabs }) {
+                        Icon(imageVector = Icons.Default.Edit, contentDescription = "Add")
                     }
                 }
             } else {
-                FloatingActionButton(onClick = { showFabs = !showFabs }) {
+                FloatingActionButton(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    onClick = { showFabs = !showFabs }) {
                     Icon(imageVector = Icons.Default.Edit, contentDescription = "Add")
                 }
             }
@@ -125,7 +142,7 @@ fun OvertimeTracker(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            items(overtimeList.value) { item ->
+            items(overtimeList.value, key = { it.uid }) { item ->
                 val dismissState = rememberSwipeToDismissBoxState(
                     positionalThreshold = { 500f },
                     confirmValueChange = {
@@ -177,9 +194,9 @@ fun OvertimeTracker(
 
         if (viewModel.showBottomSheet) {
             ModalBottomSheet(
-                windowInsets = WindowInsets.navigationBars.union(WindowInsets.ime),
+                windowInsets = if (WindowInsets.isImeVisible) WindowInsets.ime else WindowInsets.navigationBars,
                 onDismissRequest = { viewModel.showBottomSheet = false },
-                sheetState = sheetState
+                sheetState = sheetState,
             ) {
                 if (addRemoveToggle) {
                     AddOvertimeSheetContent(viewModel = viewModel)

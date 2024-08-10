@@ -13,6 +13,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,15 +26,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.compose.AppTheme
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.tloske.overtimetracker.composables.AdBanner
 import com.tloske.overtimetracker.screens.HolidayTracker
 import com.tloske.overtimetracker.screens.OvertimeTracker
 import com.tloske.overtimetracker.screens.Screen
-import com.tloske.overtimetracker.ui.theme.OvertimeTrackerTheme
 
 class MainActivity : ComponentActivity() {
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +46,7 @@ class MainActivity : ComponentActivity() {
         )
         enableEdgeToEdge()
         setContent {
-            OvertimeTrackerTheme {
+            AppTheme {
                 val navController = rememberNavController()
 
                 NavHost(
@@ -69,12 +72,19 @@ fun BottomNavBar(navController: NavController) {
         AdBanner()
         NavigationBar(
             windowInsets = WindowInsets.navigationBars,
-            containerColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
         ) {
             val navBackStackEntry by navController.currentBackStackEntryAsState()
             val currentDestination = navBackStackEntry?.destination
             navItems.forEach { screen ->
                 NavigationBarItem(
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = MaterialTheme.colorScheme.inversePrimary,
+                        selectedIconColor = MaterialTheme.colorScheme.onSecondary,
+                        unselectedIconColor = MaterialTheme.colorScheme.onPrimary,
+                        selectedTextColor = MaterialTheme.colorScheme.onSecondary,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
                         navController.navigate(screen.route) {

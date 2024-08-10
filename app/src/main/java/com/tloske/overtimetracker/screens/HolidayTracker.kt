@@ -63,6 +63,7 @@ fun HolidayTracker(
     val holidayList = viewModel.getHolidayList.collectAsState(initial = listOf())
 
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.secondaryContainer,
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -82,7 +83,11 @@ fun HolidayTracker(
                         }
                     }
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(text = stringResource(id = R.string.holiday))
+                        Text(
+                            text = "${stringResource(id = R.string.holiday)} ${
+                                Calendar.getInstance().get(Calendar.YEAR)
+                            }"
+                        )
                         Text(
                             text = "$days ${
                                 if (days == 1) stringResource(id = R.string.daysSingular)
@@ -100,9 +105,12 @@ fun HolidayTracker(
         },
         bottomBar = bottomBar,
         floatingActionButton = {
-            FloatingActionButton(onClick = {
-                viewModel.showBottomSheet = true
-            }) {
+            FloatingActionButton(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                onClick = {
+                    viewModel.showBottomSheet = true
+                }) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = stringResource(id = R.string.add)
@@ -115,7 +123,7 @@ fun HolidayTracker(
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            items(holidayList.value) { item ->
+            items(holidayList.value, key = { it.uid }) { item ->
                 val dismissState = rememberSwipeToDismissBoxState(
                     positionalThreshold = { 500f },
                     confirmValueChange = {
@@ -200,7 +208,7 @@ fun HolidayListItem(holidayData: HolidayData) {
 
             Text(
                 text =
-                if (holidayData.days == 1)
+                if (holidayData.endDate == holidayData.startDate)
                     DateFormat.getPatternInstance(DateFormat.YEAR_MONTH_DAY)
                         .format(holidayData.startDate)
                 else
